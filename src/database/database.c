@@ -1,6 +1,5 @@
 #include "database.h"
 
-
 /* FILE Structure
 size_t num_of_elements;
 Data_T elements[num_of_elements];
@@ -34,7 +33,7 @@ void save_data(Data_T *data, size_t nsize) {
 */
 Data_T *read_data(size_t *size) {
     FILE *file = fopen("data", "rb");
-    
+
     fread(size, sizeof(size_t), 1, file);
     Data_T* data = (Data_T*)malloc(sizeof(Data_T) * (*size));
     
