@@ -13,6 +13,8 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CFLAGS := -Wall -Werror $(INC_FLAGS) -MMD -MP
 
+all: $(TARGET) $(OBJS)
+
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@
 
