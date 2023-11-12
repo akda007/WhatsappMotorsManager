@@ -37,7 +37,8 @@
 
 #define MOVE_UP(l) printf("\e[" #l "A")
 #define MOVE_RIGHT(l) printf("\e[" #l "C")
-#define MOVE_LEFT(l) printf("\e[" #l "D")
+
+#define MOVE_LEFT(l) printf("\e[%dD", l)
 
 #define DISABLE_WRAP() printf("\e[7l")
 

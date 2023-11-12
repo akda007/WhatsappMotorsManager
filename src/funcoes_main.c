@@ -6,6 +6,10 @@
 #include <windows.h>
 #include "utils/terminal.h"
 
+#define printInfo(text, format, arg) centralizarTexto(text); \
+                                          MOVE_LEFT(strlen(text) - 4); \
+                                          printf(format, arg)
+
 int getTerminalWidth() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO console_info;
@@ -29,13 +33,20 @@ void centralizarTexto(const char *texto) {
     printf("%s", texto);
 }
 
+void listarCarros() {
+    
+}
+
 void ConsultaChassi(Data_T *dados, size_t qtd){
     
     long int chassiConsulta;
+    char opcao; 
     
     ERASE_ALL();
     MOVE_HOME();
 
+    startConsulta: 
+    
     centralizarTexto("****************************************************\n");
     centralizarTexto("*                                                  * ");
 
@@ -50,22 +61,37 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
     MOVE_UP(1);
     MOVE_LEFT(14);
     FOREGROUND_COLOR(156, 194, 247);
-    fflush(stdout);
+    
     fflush(stdin); 
     scanf("%ld", &chassiConsulta); 
     RESET_FOREGROUND();
         
     Data_T *carro = findData(dados, qtd, chassiConsulta);
 
-    printf("Marca: %s\n", carro->marca);
-    printf("Modelo: %s\n", carro->modelo);
-    printf("Chassi: %ld\n", carro->chassi);
-    printf("Ano: %i\n", carro->ano);
-    printf("Preco: %f\n", carro->preco);
-    printf("Disponivel: %s\n", carro->disponivel ? "Sim" : "Nao");
+    printf("\n");
 
-    puts("digite qualquer tecla para voltar para o menu");
-    getc(stdin);
+    
+    const char * text = "|                                                  | ";
+
+    printInfo(text, "Marca: %s\n", carro->marca); 
+    printInfo(text, "Modelo: %s\n", carro->modelo);
+    printInfo(text, "Chassi: %ld\n", carro->chassi);
+    printInfo(text, "Ano: %i\n", carro->ano);
+    printInfo(text, "Preco: %f\n", carro->preco);
+    printInfo(text, "Disponivel: %s\n", carro->disponivel ? "Sim" : "Nao");
+
+    centralizarTexto("****************************************************\n");
+    
+    centralizarTexto("Deseja verificar outro carro?(s/n):  ");
+    
+    scanf(" %c", &opcao);
+
+    if(opcao == 's'){
+        MOVE_UP(2);
+        
+        goto startConsulta;
+    }
+
 }
 
 
@@ -92,7 +118,7 @@ void menu(Data_T *dados, size_t qtd){
     centralizarTexto("* 0. Sair                                        *\n");
     centralizarTexto("****************************************************\n");
     centralizarTexto("Digite a opcao: ");
-    fflush(stdout);
+    
     fflush(stdin);
     scanf("%i", &opcao);
 
