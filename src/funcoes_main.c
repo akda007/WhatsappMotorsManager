@@ -29,7 +29,7 @@ void centralizarTexto(const char *texto) {
     printf("%s", texto);
 }
 
-void ConsultaChassi(){
+void ConsultaChassi(Data_T *dados, size_t qtd){
     
     long int chassiConsulta;
     
@@ -55,7 +55,6 @@ void ConsultaChassi(){
     scanf("%ld", &chassiConsulta); 
     RESET_FOREGROUND();
         
-    
     Data_T *carro = findData(dados, qtd, chassiConsulta);
 
     printf("Marca: %s\n", carro->marca);
@@ -63,14 +62,17 @@ void ConsultaChassi(){
     printf("Chassi: %ld\n", carro->chassi);
     printf("Ano: %i\n", carro->ano);
     printf("Preco: %f\n", carro->preco);
+    printf("Disponivel: %s\n", carro->disponivel ? "Sim" : "Nao");
 
+    puts("digite qualquer tecla para voltar para o menu");
+    getc(stdin);
 }
 
 
 
 
 
-void menu(){
+void menu(Data_T *dados, size_t qtd){
     
     int opcao;
     start: 
@@ -83,8 +85,8 @@ void menu(){
     centralizarTexto("****************************************************\n");
     centralizarTexto("* 1. Cadastrar novo carro                        *\n");
     centralizarTexto("* 2. Listar todos os carros                      *\n");
-    centralizarTexto("* 4. Desativar um carro                          *\n");
     centralizarTexto("* 3. Consultar carro por chassi                  *\n");
+    centralizarTexto("* 4. Desativar um carro                          *\n");
     centralizarTexto("* 5. Excluir um carro                            *\n");
     centralizarTexto("* 6. Vender um carro                             *\n");
     centralizarTexto("* 0. Sair                                        *\n");
@@ -105,31 +107,8 @@ void menu(){
         break;
     
     case 3:
-        ERASE_ALL();
-        MOVE_HOME();
-
-        centralizarTexto("****************************************************\n");
-        centralizarTexto("*                                                  * ");
-
-        MOVE_LEFT(47);
-        FOREGROUND_COLOR(255, 0 , 0);
-        printf("Insira o chassi para a consulta:");
-        RESET_FOREGROUND();
-
-        printf("\n");
-
-        centralizarTexto("**************************************************** ");
-        
-        MOVE_UP(1);
-        MOVE_LEFT(14);
-        FOREGROUND_COLOR(156, 194, 247);
-        fflush(stdout);
-        fflush(stdin); 
-        scanf("%ld", &chassiConsulta); 
-        RESET_FOREGROUND();
-        
-        
-
+        ConsultaChassi(dados, qtd);
+        goto start;
         break;
     
     case 4:

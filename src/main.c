@@ -20,6 +20,6 @@ int main() {
 
 
 
-    menu();
+    menu(dados, qtd);
     return 0;
 }
