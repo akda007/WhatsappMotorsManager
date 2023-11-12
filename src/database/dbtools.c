@@ -36,3 +36,25 @@ Data_T * findData(Data_T * dataset, size_t size, long int chassi) {
 
     return data;
 }
+
+void disableCar (Data_T * dataset, size_t size, long int chassi)
+{
+    for (size_t i = 0; i < size; i++) {
+        if (dataset[i].chassi == chassi)
+            dataset[i].disponivel = false;
+    }
+}
+
+void excludeCar (Data_T * dataset, size_t * size, long int chassi)
+{
+    for (size_t i = 0; i < *size; i++) {
+        if (dataset[i].chassi == chassi)
+        {
+            for (size_t j = i; j < (*size) - 1; j++)
+                dataset[j] = dataset[j + 1];
+
+            (*size)--;
+            break;
+        }
+    }
+}

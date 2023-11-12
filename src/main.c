@@ -53,10 +53,29 @@ int main() {
     }
 
     //Sort pelo modelo
-    sortData(read, qtd);
+    // sortData(read, qtd);
 
 
-    puts("Sorted data");
+    // puts("Sorted data");
+    // for (size_t i = 0; i < qtd; i++)
+    // {
+    //     printf("%s\n", read[i].marca);
+    //     printf("%s\n", read[i].modelo);
+    //     printf("%d\n", read[i].ano);
+    //     printf("%lu\n", read[i].chassi);
+    //     printf("%d\n", read[i].disponivel);
+    //     printf("%.2f\n", read[i].preco);
+    //     puts("\n\n");
+    // }
+
+    // Data_T *carro = findData(read, qtd, 31235515);
+    // disableCar(read, qtd, 31235515);
+
+    // printf("\n\nCarro Encontrado: %s", carro->modelo);
+    // printf("\nDisponivel: %d", carro->disponivel);
+
+    excludeCar(read, &qtd, 31235515);
+    printf("\n Carros apos a exclusao: \n\n");
     for (size_t i = 0; i < qtd; i++)
     {
         printf("%s\n", read[i].marca);
@@ -67,10 +86,6 @@ int main() {
         printf("%.2f\n", read[i].preco);
         puts("\n\n");
     }
-
-    Data_T *carro = findData(read, qtd, 31235515);
-
-    printf("\n\nCarro Encontrado: %s", carro->modelo);
     
 
     free(read);
