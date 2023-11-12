@@ -24,5 +24,6 @@ clean:
 	rm -rf manager.exe
 	find . -type f -name '*.o' -delete
 	find . -type f -name '*.d' -delete
+	find . -type f -name '*.exe' -delete
 
 -include $(DEPS)
