@@ -11,7 +11,7 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CFLAGS := -g3 -Wall -Werror $(INC_FLAGS) -MMD -MP
+CFLAGS := -std=c11 -g3 -Wall -Werror $(INC_FLAGS) -MMD -MP
 
 all: $(TARGET) $(OBJS)
 
