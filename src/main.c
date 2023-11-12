@@ -68,6 +68,11 @@ int main() {
         puts("\n\n");
     }
 
+    Data_T *carro = findData(read, qtd, 31235515);
+
+    printf("\n\nCarro Encontrado: %s", carro->modelo);
+    
+
     free(read);
     return 0;
 }
