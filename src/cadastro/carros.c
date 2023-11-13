@@ -15,7 +15,7 @@ int digitCount(long int num) {
 void getChassi(long int *chassi) {
     scanf("%ld", chassi);
     
-    if (digitCount != 6) {
+    if (digitCount(*chassi) != 6) {
         printf("Chassi invalido!");
         return getChassi(chassi);
     }
