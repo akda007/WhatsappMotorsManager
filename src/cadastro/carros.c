@@ -5,23 +5,20 @@
 #include "../utils/terminal.h"
 
 int digitCount(long int num) {
-    if (num == 0) {
+    if (num / 10 == 0) {
         return 1;
     }
 
-    return 1 + 
+    return 1 + digitCount(num / 10);
 }
 
 void getChassi(long int *chassi) {
     scanf("%ld", chassi);
-
-    int digits = 0;
-
-    while (/* condition */)
-    {
-        /* code */
-    }
     
+    if (digitCount != 6) {
+        printf("Chassi invalido!");
+        return getChassi(chassi);
+    }
 }
 
 void getInt(int *value, int min, int max) {
@@ -41,6 +38,7 @@ void getFloat(float *value, float min, float max) {
         getFloat(value, min, max);        
     }
 }
+
 Data_T *cadastro(Data_T *dados, size_t *qtd) {
 
     dados = realloc(dados, sizeof(Data_T)* ((*qtd) + 1));
