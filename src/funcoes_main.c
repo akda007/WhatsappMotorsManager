@@ -112,19 +112,20 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
     printf("\n");
 
     if (carro == NULL) {
+        MOVE_UP(1);
         printHeader("Chassi nao encontrado", 255,0,0);
         printf("\n");
-        MOVE_UP(1);
     } else {
         printCarro(carro);
     }
 
     printf("\n");
     centralizarTexto("Deseja verificar outro carro?(s/n):  ");
+    fflush(stdin);
     scanf(" %c", &opcao);
 
     if(opcao == 's'){
-        MOVE_UP(2);
+        MOVE_UP(3);
         
         goto startConsulta;
     }
@@ -227,6 +228,7 @@ void VenderCarro(Data_T *dados, size_t *qtd){
 
     MOVE_LEFT(11);
     MOVE_UP(1);
+    fflush(stdin);
     scanf("%ld", &ChassiCompra);
 
     CarroCompra = findData(dados, *qtd, ChassiCompra);
@@ -240,6 +242,7 @@ void VenderCarro(Data_T *dados, size_t *qtd){
 
         printf("\n");
         centralizarTexto("Deseja vender outro carro?(s/n):  ");
+        fflush(stdin);
         scanf(" %c", &opcaoMenu);
 
         if(opcaoMenu == 's' || opcaoMenu == 'S'){
@@ -257,6 +260,7 @@ void VenderCarro(Data_T *dados, size_t *qtd){
 
         printf("\n");
         centralizarTexto("Deseja vender outro carro?(s/n):  ");
+        fflush(stdin);
         scanf(" %c", &opcaoMenu);
 
         if(opcaoMenu == 's' || opcaoMenu == 'S'){
@@ -275,6 +279,7 @@ void VenderCarro(Data_T *dados, size_t *qtd){
     MOVE_LEFT(11);
     MOVE_UP(1);
 
+    fflush(stdin);
     scanf(" %c", &opcaoCompra);
 
     if(opcaoCompra == 's' || opcaoCompra == 'S'){
@@ -291,6 +296,7 @@ void VenderCarro(Data_T *dados, size_t *qtd){
 
     printf("\n");
     centralizarTexto("Deseja comprar outro carro?(s/n):  ");
+    fflush(stdin);
     scanf(" %c", &opcaoMenu);
 
     if(opcaoMenu == 's' || opcaoMenu == 'S'){
@@ -307,7 +313,7 @@ void VenderCarro(Data_T *dados, size_t *qtd){
 
 void menu(Data_T *dados, size_t *qtd){
     
-    int opcao;
+    char opcao;
     start: 
     
     system("cls");
@@ -338,53 +344,50 @@ void menu(Data_T *dados, size_t *qtd){
     ERASE_CUREND();
     
     fflush(stdin);
-    scanf("%i", &opcao);
+    scanf("%c", &opcao);
 
     MOVE_HOME();
     ERASE_CUREND();
 
     switch (opcao)
     {
-    case 1:
+    case '1':
         dados = CadastroCarro(dados, qtd);
         goto start;
-        break;
 
-    case 2:
+    case '2':
         fflush(stdout);
         listarCarros(dados, *qtd);
         goto start;
-        break;
     
-    case 3:
+    case '3':
         ConsultaChassi(dados, *qtd);
         goto start;
-        break;
     
-    case 4:
+    case '4':
         DesativarCarro(dados, *qtd);
         save_data(dados, *qtd);
         goto start;
-        break;
     
-    case 5:
+    case '5':
         ExcluirCarro(dados, qtd);
         save_data(dados, *qtd);
         goto start;
-        break;
 
-    case 6:
+    case '6':
         VenderCarro(dados, qtd);
         save_data(dados, *qtd);
         goto start;
-        break;
 
-    case 0:
+    case '0':
         free(dados);
         exit(0);
-        break;
     
     default:
-        break;
+        printHeader("Valor invalido", 255,0,0);
+
+        Sleep(1300);
+
+        goto start;
     }
 }

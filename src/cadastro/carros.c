@@ -7,6 +7,7 @@
 
 #define printInfo(text, format) centralizarTexto(text); \
                                           MOVE_LEFT((strlen(text) + strlen(format))/ 2); \
+                                          fflush(stdin); \
                                           printf(format)
 
 const char * text = "|                                                  | ";
@@ -73,16 +74,17 @@ Data_T *cadastro(Data_T *dados, size_t *qtd) {
 
 
     printf("\n");
+    fflush(stdin);
  
     printInfo(text, "Digite a marca do carro:           ");
     MOVE_LEFT(9);
 
-    scanf("%s", dados[*qtd].marca);
+    scanf("%[^\n]", dados[*qtd].marca);
 
     printInfo(text, "Digite o modelo do carro:          ");
     MOVE_LEFT(8);
 
-    scanf("%s", dados[*qtd].modelo);
+    scanf("%[^\n]", dados[*qtd].modelo);
 
 
     time_t t = time(NULL);
@@ -91,7 +93,7 @@ Data_T *cadastro(Data_T *dados, size_t *qtd) {
     getInt(&dados[*qtd].ano, 1860, date.tm_year + 1900);
 
 
-    getFloat( &dados[*qtd].preco, 0);
+    getFloat(&dados[*qtd].preco, 0);
 
     bool checkChassi = true;
 

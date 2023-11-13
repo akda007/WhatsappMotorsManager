@@ -3,7 +3,7 @@
 
 void save_data(Data_T *data, size_t nsize) {
     FILE *file = fopen("data", "wb");
-
+    
     fwrite(&nsize, sizeof(size_t), 1, file);
 
     if (nsize > 0) {
