@@ -25,7 +25,7 @@
 #define MOVE_DOWN(l) printf("\e[" #l "B")
 #define MOVE_UP(l) printf("\e[" #l "A")
 #define MOVE_RIGHT(l) printf("\e[" #l "C")
-#define MOVE_LEFT(l) printf("\e[%dD", l)
+#define MOVE_LEFT(l) printf("\e[%dD", (int)l)
 #define DISABLE_WRAP() printf("\e[7l")
 
 void configureTerminal();

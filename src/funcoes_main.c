@@ -105,7 +105,7 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
 }
 
 
-void CadastroCarro(Data_T *dados, size_t *qtd) {
+Data_T * CadastroCarro(Data_T *dados, size_t *qtd) {
         
     centralizarTexto("****************************************************\n");
     centralizarTexto("*                Cadastro de Carros                *\n");
@@ -114,8 +114,14 @@ void CadastroCarro(Data_T *dados, size_t *qtd) {
     dados = cadastro(dados, qtd);
 
     save_data(dados, *qtd);
+
+    return dados;
 }
  
+
+void DesativarCarro(Data_T *dados, size_t qtd) {
+    
+}
 
 
 void menu(Data_T *dados, size_t *qtd){
@@ -137,6 +143,8 @@ void menu(Data_T *dados, size_t *qtd){
     centralizarTexto("| 0. Sair                                        |\n");
     centralizarTexto("****************************************************\n");
     centralizarTexto("Digite a opcao: ");
+
+    ERASE_CUREND();
     
     fflush(stdin);
     scanf("%i", &opcao);
@@ -147,7 +155,7 @@ void menu(Data_T *dados, size_t *qtd){
     switch (opcao)
     {
     case 1:
-        CadastroCarro(dados, qtd);
+        dados = CadastroCarro(dados, qtd);
         goto start;
         break;
 
@@ -163,7 +171,7 @@ void menu(Data_T *dados, size_t *qtd){
         break;
     
     case 4:
-
+        
         break;
     
     case 5:

@@ -16,7 +16,7 @@ void getChassi(long int *chassi) {
     scanf("%ld", chassi);
     
     if (digitCount(*chassi) != 6) {
-        printf("Chassi invalido!");
+        centralizarTexto("Chassi invalido!\n");
         return getChassi(chassi);
     }
 }
@@ -25,17 +25,17 @@ void getInt(int *value, int min, int max) {
     scanf("%d", value);
 
     if (*value < min || *value > max) {
-        printf("Valor invalido!\n");
+        centralizarTexto("Numero invalido!\n");
         getInt(value, min, max);        
     }
 }
 
-void getFloat(float *value, float min, float max) {
+void getFloat(float *value, float min) {
     scanf("%f", value);
 
-    if (*value < min || *value > max) {
-        printf("Valor invalido!");
-        getFloat(value, min, max);        
+    if (*value < min) {
+        centralizarTexto("Numero invalido!\n");
+        getFloat(value, min);        
     }
 }
 
@@ -60,22 +60,23 @@ Data_T *cadastro(Data_T *dados, size_t *qtd) {
     getInt(&dados[*qtd].ano, 1860, date.tm_year + 1900);
 
     centralizarTexto("*Digite o preço do carro: *");
-    scanf("%f", &dados[*qtd].preco);
+    getFloat( &dados[*qtd].preco, 0);
 
     bool checkChassi = true;
 
     while(checkChassi)
     {
+        checkChassi = false;
 
-        centralizarTexto("*Digite o chassi do carro: *");
-        scanf("%ld", &dados[*qtd].chassi);
+        centralizarTexto("*Digite o chassi do carro: ");
+        getChassi(&dados[*qtd].chassi);
+
         for (int i = 0; i < *qtd - 1; i++)
         {
-            if (dados[i].chassi != dados[*qtd].chassi)
-                continue;
-            else
-            {
-                checkChassi = false;
+            if (dados[i].chassi == dados[*qtd].chassi) {
+                checkChassi = true;
+                
+                centralizarTexto("Chassi ja existe!");
                 break;
             }
         }
