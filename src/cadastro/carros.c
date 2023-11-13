@@ -64,8 +64,24 @@ Data_T *cadastro(Data_T *dados, size_t *qtd) {
     centralizarTexto("*Digite o preço do carro: *");
     scanf("%f", &dados[*qtd].preco);
 
-    centralizarTexto("*Digite o chassi do carro: *");
-    scanf("%ld", &dados[*qtd].chassi);
+    bool checkChassi = true;
+
+    while(checkChassi)
+    {
+
+        centralizarTexto("*Digite o chassi do carro: *");
+        scanf("%ld", &dados[*qtd].chassi);
+        for (int i = 0; i < *qtd - 1; i++)
+        {
+            if (dados[i].chassi != dados[*qtd].chassi)
+                continue;
+            else
+            {
+                checkChassi = false;
+                break;
+            }
+        }
+    }
 
     dados[*qtd].disponivel = true;
 
