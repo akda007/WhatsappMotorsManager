@@ -30,7 +30,7 @@ void printCarro(Data_T *carro) {
 void printHeader(const char * text, int r, int g, int b) {
     const char * text_holder = "*                                                  * ";
 
-    centralizarTexto("****************************************************");
+    centralizarTexto("**************************************************** ");
     ERASE_LEND();
     printf("\n");
     centralizarTexto("*                                                  * ");
