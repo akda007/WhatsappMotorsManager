@@ -30,8 +30,11 @@ void printCarro(Data_T *carro) {
 void printHeader(const char * text, int r, int g, int b) {
     const char * text_holder = "*                                                  * ";
 
-    centralizarTexto("****************************************************\n");
+    centralizarTexto("****************************************************");
+    ERASE_LEND();
+    printf("\n");
     centralizarTexto("*                                                  * ");
+    ERASE_LEND();
 
     MOVE_LEFT((strlen(text_holder) + strlen(text) + 1) / 2);
 
@@ -44,6 +47,7 @@ void printHeader(const char * text, int r, int g, int b) {
 
     printf("\n");
     centralizarTexto("**************************************************** ");
+    ERASE_LEND();
 
 }
 
@@ -311,6 +315,7 @@ void menu(Data_T *dados, size_t *qtd){
     printHeader("Whatsapp Motors", 0, 255, 0);
     ERASE_LEND();
     printf("\n");
+    ERASE_LEND();
     centralizarTexto("| 1. Cadastrar novo carro                        |\n");
     ERASE_LEND();
     centralizarTexto("| 2. Listar todos os carros                      |\n");
