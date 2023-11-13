@@ -309,16 +309,26 @@ void menu(Data_T *dados, size_t *qtd){
     system("cls");
     
     printHeader("Whatsapp Motors", 0, 255, 0);
+    ERASE_LEND();
     printf("\n");
     centralizarTexto("| 1. Cadastrar novo carro                        |\n");
+    ERASE_LEND();
     centralizarTexto("| 2. Listar todos os carros                      |\n");
+    ERASE_LEND();
     centralizarTexto("| 3. Consultar carro por chassi                  |\n");
+    ERASE_LEND();
     centralizarTexto("| 4. Desativar/Ativar um carro                   |\n");
+    ERASE_LEND();
     centralizarTexto("| 5. Excluir um carro                            |\n");
+    ERASE_LEND();
     centralizarTexto("| 6. Vender um carro                             |\n");
+    ERASE_LEND();
     centralizarTexto("| 0. Sair                                        |\n");
+    ERASE_LEND();
     centralizarTexto("****************************************************\n");
+    ERASE_LEND();
     centralizarTexto("Digite a opcao: ");
+    ERASE_LEND();
 
     ERASE_CUREND();
     
