@@ -4,11 +4,31 @@
 #include <time.h>
 #include "../utils/terminal.h"
 
+int digitCount(long int num) {
+    if (num == 0) {
+        return 1;
+    }
+
+    return 1 + 
+}
+
+void getChassi(long int *chassi) {
+    scanf("%ld", chassi);
+
+    int digits = 0;
+
+    while (/* condition */)
+    {
+        /* code */
+    }
+    
+}
+
 void getInt(int *value, int min, int max) {
     scanf("%d", value);
 
     if (*value < min || *value > max) {
-        printf("Valor invalido!");
+        printf("Valor invalido!\n");
         getInt(value, min, max);        
     }
 }
@@ -18,10 +38,9 @@ void getFloat(float *value, float min, float max) {
 
     if (*value < min || *value > max) {
         printf("Valor invalido!");
-        getInt(value, min, max);        
+        getFloat(value, min, max);        
     }
 }
-
 Data_T *cadastro(Data_T *dados, size_t *qtd) {
 
     dados = realloc(dados, sizeof(Data_T)* ((*qtd) + 1));
@@ -40,7 +59,7 @@ Data_T *cadastro(Data_T *dados, size_t *qtd) {
     time_t t = time(NULL);
     struct tm date = *localtime(&t);
 
-    getInt(&dados[*qtd].ano, 1860, date.tm_year);
+    getInt(&dados[*qtd].ano, 1860, date.tm_year + 1900);
 
     centralizarTexto("*Digite o preço do carro: *");
     scanf("%f", &dados[*qtd].preco);
