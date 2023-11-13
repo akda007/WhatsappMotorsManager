@@ -44,7 +44,7 @@ Data_T * findData(Data_T * dataset, size_t size, long int chassi);
  * @param size Tamanho do array dataset.
  * @param chassi Número de chassi do carro a ser desabilitado.
  */
-void disableCar(Data_T *dataset, size_t size, long int chassi);
+bool disableCar(Data_T *dataset, size_t size, long int chassi);
 
 /**
  * @brief Exclui um carro com o número de chassi fornecido do conjunto de dados.
@@ -55,6 +55,6 @@ void disableCar(Data_T *dataset, size_t size, long int chassi);
  * @param size Ponteiro para o tamanho do array dataset. O tamanho será atualizado após a exclusão.
  * @param chassi Número de chassi do carro a ser excluído.
  */
-void excludeCar(Data_T *dataset, size_t *size, long int chassi);
+bool excludeCar(Data_T *dataset, size_t *size, long int chassi);
 
 #endif //WHATSAPPMOTORSMANAGER_DBTOOLS_H

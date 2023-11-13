@@ -4,6 +4,22 @@
 #include <time.h>
 #include "../utils/terminal.h"
 
+
+#define printInfo(text, format) centralizarTexto(text); \
+                                          MOVE_LEFT((strlen(text) + strlen(format))/ 2); \
+                                          printf(format)
+
+const char * text = "|                                                  | ";
+
+void printInfoColored(const char *print_text, int r, int g, int b){
+    centralizarTexto(text); 
+    MOVE_LEFT((strlen(text) + strlen(print_text)) / 2); 
+    FOREGROUND_COLOR(r, g, b);
+    printf(print_text);
+    RESET_FOREGROUND(); 
+    printf("\n");
+
+}
 int digitCount(long int num) {
     if (num / 10 == 0) {
         return 1;
@@ -12,29 +28,38 @@ int digitCount(long int num) {
     return 1 + digitCount(num / 10);
 }
 
-void getChassi(long int *chassi) {
+bool getChassi(long int *chassi) {
     scanf("%ld", chassi);
     
     if (digitCount(*chassi) != 6) {
-        centralizarTexto("Chassi invalido!\n");
-        return getChassi(chassi);
+        return false;
     }
+
+    return true;
 }
 
 void getInt(int *value, int min, int max) {
+    printInfo(text, "Digite o ano do carro:             ");
+    MOVE_LEFT(11);
+
     scanf("%d", value);
 
     if (*value < min || *value > max) {
-        centralizarTexto("Numero invalido!\n");
+        printInfoColored("Numero Invalido!", 255, 0, 0);
+        
         getInt(value, min, max);        
     }
 }
 
 void getFloat(float *value, float min) {
+    printInfo(text, "Digite o preco do carro:           ");
+    MOVE_LEFT(10);
+
     scanf("%f", value);
 
     if (*value < min) {
-        centralizarTexto("Numero invalido!\n");
+        printInfoColored("Numero Invalido!", 255, 0, 0);
+
         getFloat(value, min);        
     }
 }
@@ -45,21 +70,27 @@ Data_T *cadastro(Data_T *dados, size_t *qtd) {
     if(dados == NULL){
         exit(-1);
     }
+
+
+    printf("\n");
  
-    centralizarTexto("*Digite o nome da marca do carro: *");
+    printInfo(text, "Digite a marca do carro:           ");
+    MOVE_LEFT(9);
+
     scanf("%s", dados[*qtd].marca);
 
-    centralizarTexto("*Digite o nome do modelo do carro: *");
+    printInfo(text, "Digite o modelo do carro:          ");
+    MOVE_LEFT(8);
+
     scanf("%s", dados[*qtd].modelo);
 
-    centralizarTexto("*Digite o ano do carro: *");
 
     time_t t = time(NULL);
     struct tm date = *localtime(&t);
 
     getInt(&dados[*qtd].ano, 1860, date.tm_year + 1900);
 
-    centralizarTexto("*Digite o preço do carro: *");
+
     getFloat( &dados[*qtd].preco, 0);
 
     bool checkChassi = true;
@@ -68,15 +99,25 @@ Data_T *cadastro(Data_T *dados, size_t *qtd) {
     {
         checkChassi = false;
 
-        centralizarTexto("*Digite o chassi do carro: ");
-        getChassi(&dados[*qtd].chassi);
+        printInfo(text, "Digite o chassi do carro:          ");
+        MOVE_LEFT(8);
 
-        for (int i = 0; i < *qtd - 1; i++)
+        if (!getChassi(&dados[*qtd].chassi)) {
+            printInfoColored("Chassi Invalido", 255,0,0);
+
+            checkChassi = true;
+            continue;
+        }
+
+
+        if (*qtd > 1)
+        for (int i = 0; i < *qtd; i++)
         {
             if (dados[i].chassi == dados[*qtd].chassi) {
                 checkChassi = true;
                 
-                centralizarTexto("Chassi ja existe!");
+                printInfoColored("Chassi ja cadastrado", 255,0,0);
+                
                 break;
             }
         }
@@ -86,7 +127,10 @@ Data_T *cadastro(Data_T *dados, size_t *qtd) {
 
     (*qtd) += 1;
 
-    centralizarTexto("Cadastro realizado!");
+    printInfoColored("Veiculo cadastrado com sucesso!", 0, 255, 0);
+    centralizarTexto("---------------------------------------------------- ");
+    printf("\n");
+
     Sleep(2000);
 
     return dados;

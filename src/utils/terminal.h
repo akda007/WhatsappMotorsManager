@@ -17,7 +17,7 @@
 #define MOVE_HOME() printf("\e[H")
 #define HIDE_CURSOR() printf("\e[?25l")
 #define SHOW_CURSOR() printf("\e[?25h")
-#define FOREGROUND_COLOR(r, g, b) printf("\e[38;2;" #r ";" #g ";" #b "m")
+#define FOREGROUND_COLOR(r, g, b) printf("\e[38;2;%d;%d;%dm", r , g, b);
 #define BACKGROUND_COLOR(r, g, b) printf("\e[48;2;" #r ";" #g ";" #b "m")
 #define RESET_FOREGROUND() printf("\e[39m")
 #define RESET_BACKGROUND() printf("\e[49m")
@@ -27,6 +27,7 @@
 #define MOVE_RIGHT(l) printf("\e[" #l "C")
 #define MOVE_LEFT(l) printf("\e[%dD", (int)l)
 #define DISABLE_WRAP() printf("\e[7l")
+
 
 void configureTerminal();
 void centralizarTexto(const char *texto);

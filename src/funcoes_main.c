@@ -7,6 +7,8 @@
 #include "utils/terminal.h"
 #include "cadastro/carros.h"
 
+
+
 #define printInfo(text, format, arg) centralizarTexto(text); \
                                           MOVE_LEFT(strlen(text) - 4); \
                                           printf(format, arg)
@@ -25,29 +27,44 @@ void printCarro(Data_T *carro) {
 
 }
 
-void listarCarros(Data_T *dados, size_t qtd) {
-    sortData(dados, qtd);
-
-    const char * title = "LISTA DE VEICULOS";
+void printHeader(const char * text, int r, int g, int b) {
     const char * text_holder = "*                                                  * ";
-
 
     centralizarTexto("****************************************************\n");
     centralizarTexto("*                                                  * ");
 
-    MOVE_LEFT((strlen(text_holder) + strlen(title) + 1) / 2);
+    MOVE_LEFT((strlen(text_holder) + strlen(text) + 1) / 2);
 
-    FOREGROUND_COLOR(18, 140, 126);
-    printf(title);
+    if (r >= 0 || g >= 0 || b >= 0) {
+        FOREGROUND_COLOR(r, g, b);
+    }
+
+    printf(text);
     RESET_FOREGROUND();
 
     printf("\n");
-    centralizarTexto("****************************************************\n");
+    centralizarTexto("**************************************************** ");
 
-    for (size_t i = 0; i < qtd; i++) {
-        printCarro(&dados[i]);
+}
+
+void listarCarros(Data_T *dados, size_t qtd) {
+    printHeader("LISTA DE CARROS", 18, 140, 126);
+
+    printf("\n");
+
+    if (qtd == 0) {
+        MOVE_UP(1);
+        printHeader("Sem carros cadastrados", 255,0,0);
+    } else {
+
+        sortData(dados, qtd);
+        for (size_t i = 0; i < qtd; i++) {
+            printCarro(&dados[i]);
+        }
     }
 
+
+    printf("\n");
     centralizarTexto("Aperte qualquer tecla para voltar");
     printf("\n");    
     fflush(stdin);
@@ -63,16 +80,19 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
 
     startConsulta: 
     
-    centralizarTexto("****************************************************\n");
-    centralizarTexto("*                                                  * ");
+    // centralizarTexto("****************************************************\n");
+    // centralizarTexto("*                                                  * ");
 
-    MOVE_LEFT(47);
-    FOREGROUND_COLOR(255, 0 , 0);
-    printf("Insira o chassi para a consulta:");
-    RESET_FOREGROUND();
+    // MOVE_LEFT(47);
+    // FOREGROUND_COLOR(255, 0 , 0);
+    // printf("Insira o chassi para a consulta:");
+    // RESET_FOREGROUND();
 
-    printf("\n");
-    centralizarTexto("**************************************************** ");
+    // printf("\n");
+    // centralizarTexto("**************************************************** ");
+
+    printHeader("Insira o chassi para a consulta:              ", 37, 211, 102);
+
         
     MOVE_UP(1);
     MOVE_LEFT(14);
@@ -88,11 +108,14 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
     printf("\n");
 
     if (carro == NULL) {
-        centralizarTexto("Chassi nao encontrado\n");
+        printHeader("Chassi nao encontrado", 255,0,0);
+        printf("\n");
+        MOVE_UP(1);
     } else {
         printCarro(carro);
     }
 
+    printf("\n");
     centralizarTexto("Deseja verificar outro carro?(s/n):  ");
     scanf(" %c", &opcao);
 
@@ -107,9 +130,7 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
 
 Data_T * CadastroCarro(Data_T *dados, size_t *qtd) {
         
-    centralizarTexto("****************************************************\n");
-    centralizarTexto("*                Cadastro de Carros                *\n");
-    centralizarTexto("****************************************************\n");
+    printHeader("CADASTRO DE CARRO", 37, 211, 102);
 
     dados = cadastro(dados, qtd);
 
@@ -120,8 +141,164 @@ Data_T * CadastroCarro(Data_T *dados, size_t *qtd) {
  
 
 void DesativarCarro(Data_T *dados, size_t qtd) {
+    MOVE_HOME();
+    ERASE_CUREND();
     
+    long int chassi;
+
+    printHeader("Insira o chassi para desativar/ativar:          ", 37, 211, 102);
+
+    MOVE_LEFT(12);
+    MOVE_UP(1);
+    getChassi(&chassi);
+
+    bool ret = disableCar(dados, qtd, chassi);    
+
+    if (ret) {
+        Data_T *carro = findData(dados, qtd, chassi);
+
+        printHeader(carro->disponivel ? "Carro Ativado!" : "Carro Desativado!", 0, 255, 0);
+    } else {
+        printHeader("Carro nao encontrado!", 255, 0, 0);
+    }
+
+    printf("\n");
+
+    centralizarTexto("Aperte qualquer tecla para voltar");
+    centralizarTexto("\n");
+
+    fflush(stdin);
+    getchar();
 }
+
+void ExcluirCarro(Data_T *dados, size_t *qtd){
+    
+    MOVE_HOME();
+    ERASE_CUREND();
+    
+    long int ChassiExcluir;
+    
+    printHeader("Insira o chassi para a exclusao:             ", 37, 211, 102);
+
+
+    MOVE_LEFT(12);
+    MOVE_UP(1);
+    while (!getChassi(&ChassiExcluir)) {
+        printHeader("Chassi invalido!", 255, 0, 0);
+        
+        printf("\n");
+
+        MOVE_UP(1);
+        printHeader("Insira o chassi para a exclusao:             ", 37, 211, 102);
+        MOVE_LEFT(12);
+        MOVE_UP(1);
+    }
+
+    bool ret = excludeCar(dados, qtd, ChassiExcluir);
+
+    if (ret) {
+        printHeader("Carro excluido com sucesso!", 0, 255, 0);
+    } else {
+        printHeader("Carro nao encontrado!", 255, 0, 0);
+    }
+
+    printf("\n");
+    centralizarTexto("Aperte qualquer tecla para voltar");
+    printf("\n");    
+    fflush(stdin);
+    getchar();
+}
+
+void VenderCarro(Data_T *dados, size_t *qtd){
+    
+    long int ChassiCompra;
+    char opcaoCompra;
+    char opcaoMenu;
+    Data_T *CarroCompra;
+
+    startCompra: 
+
+    printf("\n");
+    printHeader("Insira o chassi desejado para a venda:         ", 37, 211, 102);
+
+    MOVE_LEFT(11);
+    MOVE_UP(1);
+    scanf("%ld", &ChassiCompra);
+
+    CarroCompra = findData(dados, *qtd, ChassiCompra);
+
+    printf("\n");
+
+    if (CarroCompra == NULL) {
+        MOVE_UP(1);
+
+        printHeader("Chassi nao encontrado", 255, 0, 0);
+
+        printf("\n");
+        centralizarTexto("Deseja vender outro carro?(s/n):  ");
+        scanf(" %c", &opcaoMenu);
+
+        if(opcaoMenu == 's' || opcaoMenu == 'S'){
+            MOVE_UP(3);
+
+            goto startCompra;
+        } 
+
+        return;
+    }
+
+    if(!CarroCompra->disponivel) {
+        MOVE_UP(1);
+        printHeader("Carro nao disponivel.", 255, 0, 0);
+
+        printf("\n");
+        centralizarTexto("Deseja vender outro carro?(s/n):  ");
+        scanf(" %c", &opcaoMenu);
+
+        if(opcaoMenu == 's' || opcaoMenu == 'S'){
+            MOVE_UP(3);
+
+            goto startCompra;
+        } 
+
+        return;
+    }
+    printCarro(CarroCompra);
+    MOVE_UP(1);
+
+    printHeader("Esse e o carro desejado?(s/n): ", 37, 211, 102);
+
+    MOVE_LEFT(11);
+    MOVE_UP(1);
+
+    scanf(" %c", &opcaoCompra);
+
+    if(opcaoCompra == 's' || opcaoCompra == 'S'){
+        FOREGROUND_COLOR(0,255,0);
+        centralizarTexto("Parabens pela compra!, a WhatsappMotors Agradece!");
+        RESET_FOREGROUND();
+
+        excludeCar(dados, qtd, ChassiCompra);
+        save_data(dados, *qtd);
+    } else {
+        MOVE_UP(1);
+        goto startCompra;
+    }
+
+    printf("\n");
+    centralizarTexto("Deseja comprar outro carro?(s/n):  ");
+    scanf(" %c", &opcaoMenu);
+
+    if(opcaoMenu == 's' || opcaoMenu == 'S'){
+        MOVE_UP(2);
+        
+        goto startCompra;
+    } 
+
+}
+    
+
+
 
 
 void menu(Data_T *dados, size_t *qtd){
@@ -131,13 +308,12 @@ void menu(Data_T *dados, size_t *qtd){
     
     system("cls");
     
-    centralizarTexto(        "****************************************************\n");
-    centralizarTexto("========*                 Whatsapp Motors                  *========\n");
-    centralizarTexto("****************************************************\n");
+    printHeader("Whatsapp Motors", 0, 255, 0);
+    printf("\n");
     centralizarTexto("| 1. Cadastrar novo carro                        |\n");
     centralizarTexto("| 2. Listar todos os carros                      |\n");
     centralizarTexto("| 3. Consultar carro por chassi                  |\n");
-    centralizarTexto("| 4. Desativar um carro                          |\n");
+    centralizarTexto("| 4. Desativar/Ativar um carro                   |\n");
     centralizarTexto("| 5. Excluir um carro                            |\n");
     centralizarTexto("| 6. Vender um carro                             |\n");
     centralizarTexto("| 0. Sair                                        |\n");
@@ -171,19 +347,26 @@ void menu(Data_T *dados, size_t *qtd){
         break;
     
     case 4:
-        
+        DesativarCarro(dados, *qtd);
+        save_data(dados, *qtd);
+        goto start;
         break;
     
     case 5:
-
+        ExcluirCarro(dados, qtd);
+        save_data(dados, *qtd);
+        goto start;
         break;
 
     case 6:
-
+        VenderCarro(dados, qtd);
+        save_data(dados, *qtd);
+        goto start;
         break;
 
     case 0:
-
+        free(dados);
+        exit(0);
         break;
     
     default:
