@@ -5,45 +5,61 @@
 #include <string.h>
 #include <windows.h>
 #include "utils/terminal.h"
+#include "cadastro/carros.h"
 
 #define printInfo(text, format, arg) centralizarTexto(text); \
                                           MOVE_LEFT(strlen(text) - 4); \
                                           printf(format, arg)
 
-int getTerminalWidth() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO console_info;
+void printCarro(Data_T *carro) {
+    const char * text = "|                                                  | ";
 
-    if (GetConsoleScreenBufferInfo(hConsole, &console_info)) {
-        return console_info.dwSize.X;
-    } else {
-        return -1;
-    }
+    printInfo(text, "Marca: %s\n", carro->marca); 
+    printInfo(text, "Modelo: %s\n", carro->modelo);
+    printInfo(text, "Chassi: %ld\n", carro->chassi);
+    printInfo(text, "Ano: %i\n", carro->ano);
+    printInfo(text, "Preco: %f\n", carro->preco);
+    printInfo(text, "Disponivel: %s\n", carro->disponivel ? "Sim" : "Nao");
+
+    centralizarTexto("****************************************************\n");
+
 }
 
-void centralizarTexto(const char *texto) {
-    int larguraLinha = getTerminalWidth();
+void listarCarros(Data_T *dados, size_t qtd) {
+    sortData(dados, qtd);
 
-    int posicaoInicial = (larguraLinha - strlen(texto)) / 2;
+    const char * title = "LISTA DE VEICULOS";
+    const char * text_holder = "*                                                  * ";
 
-    for (int i = 0; i < posicaoInicial; i++) {
-        printf(" ");
+
+    centralizarTexto("****************************************************\n");
+    centralizarTexto("*                                                  * ");
+
+    MOVE_LEFT((strlen(text_holder) + strlen(title) + 1) / 2);
+
+    FOREGROUND_COLOR(18, 140, 126);
+    printf(title);
+    RESET_FOREGROUND();
+
+    printf("\n");
+    centralizarTexto("****************************************************\n");
+
+    for (size_t i = 0; i < qtd; i++) {
+        printCarro(&dados[i]);
     }
 
-    printf("%s", texto);
-}
-
-void listarCarros() {
-    
+    centralizarTexto("Aperte qualquer tecla para voltar");
+    printf("\n");    
+    fflush(stdin);
+    getchar();
 }
 
 void ConsultaChassi(Data_T *dados, size_t qtd){
-    
     long int chassiConsulta;
     char opcao; 
     
-    ERASE_ALL();
     MOVE_HOME();
+    ERASE_CUREND();
 
     startConsulta: 
     
@@ -62,6 +78,7 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
     MOVE_LEFT(14);
     FOREGROUND_COLOR(156, 194, 247);
     
+    
     fflush(stdin); 
     scanf("%ld", &chassiConsulta); 
     RESET_FOREGROUND();
@@ -70,20 +87,13 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
 
     printf("\n");
 
-    
-    const char * text = "|                                                  | ";
+    if (carro == NULL) {
+        centralizarTexto("Chassi nao encontrado\n");
+    } else {
+        printCarro(carro);
+    }
 
-    printInfo(text, "Marca: %s\n", carro->marca); 
-    printInfo(text, "Modelo: %s\n", carro->modelo);
-    printInfo(text, "Chassi: %ld\n", carro->chassi);
-    printInfo(text, "Ano: %i\n", carro->ano);
-    printInfo(text, "Preco: %f\n", carro->preco);
-    printInfo(text, "Disponivel: %s\n", carro->disponivel ? "Sim" : "Nao");
-
-    centralizarTexto("****************************************************\n");
-    
     centralizarTexto("Deseja verificar outro carro?(s/n):  ");
-    
     scanf(" %c", &opcao);
 
     if(opcao == 's'){
@@ -95,45 +105,60 @@ void ConsultaChassi(Data_T *dados, size_t qtd){
 }
 
 
+void CadastroCarro(Data_T *dados, size_t *qtd) {
+        
+    centralizarTexto("****************************************************\n");
+    centralizarTexto("*                Cadastro de Carros                *\n");
+    centralizarTexto("****************************************************\n");
+
+    dados = cadastro(dados, qtd);
+
+    save_data(dados, *qtd);
+}
+ 
 
 
-
-void menu(Data_T *dados, size_t qtd){
+void menu(Data_T *dados, size_t *qtd){
     
     int opcao;
     start: 
     
-    ERASE_ALL();
-    MOVE_HOME();
+    system("cls");
     
     centralizarTexto(        "****************************************************\n");
     centralizarTexto("========*                 Whatsapp Motors                  *========\n");
     centralizarTexto("****************************************************\n");
-    centralizarTexto("* 1. Cadastrar novo carro                        *\n");
-    centralizarTexto("* 2. Listar todos os carros                      *\n");
-    centralizarTexto("* 3. Consultar carro por chassi                  *\n");
-    centralizarTexto("* 4. Desativar um carro                          *\n");
-    centralizarTexto("* 5. Excluir um carro                            *\n");
-    centralizarTexto("* 6. Vender um carro                             *\n");
-    centralizarTexto("* 0. Sair                                        *\n");
+    centralizarTexto("| 1. Cadastrar novo carro                        |\n");
+    centralizarTexto("| 2. Listar todos os carros                      |\n");
+    centralizarTexto("| 3. Consultar carro por chassi                  |\n");
+    centralizarTexto("| 4. Desativar um carro                          |\n");
+    centralizarTexto("| 5. Excluir um carro                            |\n");
+    centralizarTexto("| 6. Vender um carro                             |\n");
+    centralizarTexto("| 0. Sair                                        |\n");
     centralizarTexto("****************************************************\n");
     centralizarTexto("Digite a opcao: ");
     
     fflush(stdin);
     scanf("%i", &opcao);
 
+    MOVE_HOME();
+    ERASE_CUREND();
+
     switch (opcao)
     {
     case 1:
-        
+        CadastroCarro(dados, qtd);
+        goto start;
         break;
 
     case 2:
-
+        fflush(stdout);
+        listarCarros(dados, *qtd);
+        goto start;
         break;
     
     case 3:
-        ConsultaChassi(dados, qtd);
+        ConsultaChassi(dados, *qtd);
         goto start;
         break;
     

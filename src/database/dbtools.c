@@ -18,7 +18,7 @@ void sortData(Data_T * dataset, size_t size) {
         sorted = true;
 
         for (size_t i = 0; i < size-1; i++) {
-            if (strcmp(dataset[i].modelo, dataset[i+1].modelo) > 0) {
+            if (strcmp(dataset[i].marca, dataset[i+1].marca) > 0) {
                 swapData(&dataset[i], &dataset[i+1]);
                 sorted = false;
             }
@@ -33,6 +33,6 @@ Data_T * findData(Data_T * dataset, size_t size, long int chassi) {
         if (dataset[i].chassi == chassi)
             data = &dataset[i];
     }
-
+    
     return data;
 }
